@@ -26,7 +26,7 @@ export default function App() {
     return Object.values(p).reduce((sum, v) => sum + v.timesSolved * 10, 0)
   })
   const [dark, setDark] = useState(false)
-  const [globalXP, setGlobalXP] = useState(0)
+  const [_globalXP, setGlobalXP] = useState(0)
   const [displayXP, setDisplayXP] = useState(0)
 
   useEffect(() => {
