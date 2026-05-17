@@ -1,36 +1,40 @@
-# Espee
+# espee
 
-**A muscle memory app for coding.**
+**muscle memory for coding interviews**
 
-Espee teaches you to solve coding problems by building solutions one block at a time. Pick the right piece, get instant feedback, and repeat until the patterns stick.
+espee teaches you to solve coding problems by building solutions one block at a time. pick the right piece, get instant feedback, and repeat until the patterns stick.
 
-## How it works
+## how it works
 
-- Each problem is broken into steps
-- Each step shows you 4 code blocks — only one is correct
-- Wrong answers tell you exactly why they're wrong
-- Solved problems can be revisited anytime for spaced repetition
+- each problem is broken into steps
+- each step shows you 4 code blocks — only one is correct
+- wrong answers tell you exactly why they're wrong
+- supports C# and Python
+- progress saved automatically, no login required
 
-## Stack
+## try it
+
+**[espee.vercel.app](https://espee.vercel.app)**
+
+mobile app coming soon.
+
+## built with
 
 - React + Vite + TypeScript
-- localStorage for progress tracking
-- No backend, no login, no friction
+- localStorage for progress
+- no backend, no database
 
-## Running locally
+## roadmap
 
-```bash
-npm install
-npm run dev
-```
+- [x] C# problems
+- [x] Python problems  
+- [x] Dark mode
+- [ ] Mobile app (iOS + Android)
+- [ ] Progress screen
+- [ ] Hard difficulty problems
+- [ ] More languages (Java, Go)
+- [ ] User accounts + sync
 
-## Roadmap
+## about
 
-- [ ] Dark mode ✅
-- [ ] More problems (medium + hard) ✅
-- [ ] Python language support (same problems, Python syntax)
-- [ ] Mobile app (Expo)
-- [ ] Progress screen (solve history, streaks, XP over time)
-- [ ] Visual diagrams after solving (how the algorithm works)
-- [ ] User accounts + sync across devices
-- [ ] Additional languages (Java, Go, Rust, test)
+built by [Scott Payton](https://twitter.com/espeeapp)
