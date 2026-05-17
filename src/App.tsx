@@ -7,13 +7,15 @@ export default function App() {
   const [progress, setProgress] = useState(() => loadProgress())
   const [currentIdx, setCurrentIdx] = useState(0)
   const [problemKey, setProblemKey] = useState(0)
+  const [language, setLanguage] = useState<'csharp' | 'python'>('csharp')
   const [xp, setXp] = useState(() => {
     const p = loadProgress()
     return Object.values(p).reduce((sum, v) => sum + v.timesSolved * 10, 0)
   })
   const [dark, setDark] = useState(false)
 
-  const currentProblem = problems[currentIdx]
+  const filteredProblems = problems.filter(p => p.language === language)
+  const currentProblem = filteredProblems[currentIdx] ?? filteredProblems[0]
 
   function toggleDark() {
     const next = !dark
@@ -31,7 +33,7 @@ export default function App() {
     const newProgress = markSolved(currentProblem.id)
     setProgress(newProgress)
     setXp(prev => prev + 10)
-    const nextIdx = (currentIdx + 1) % problems.length
+    const nextIdx = (currentIdx + 1) % filteredProblems.length
     setCurrentIdx(nextIdx)
     setProblemKey(k => k + 1)
   }
@@ -45,23 +47,22 @@ export default function App() {
       color: 'var(--text-primary)',
     }}>
 
+      {/* Header */}
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: '8px',
+        marginBottom: '16px',
       }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-<span style={{
-            fontSize: '14px',
-            fontWeight: 300,
-            letterSpacing: '0.15em',
-            color: 'var(--text-primary)',
-            fontFamily: 'Inter, system-ui, sans-serif',
-          }}>
-            espee
-          </span>
-        </div>
+        <span style={{
+          fontSize: '14px',
+          fontWeight: 300,
+          letterSpacing: '0.15em',
+          color: 'var(--text-primary)',
+          fontFamily: 'Inter, system-ui, sans-serif',
+        }}>
+          espee
+        </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)' }}>{xp} XP</div>
@@ -91,32 +92,52 @@ export default function App() {
         </div>
       </div>
 
-      <div style={{ marginBottom: '20px' }}>
-        <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 500, color: 'var(--text-primary)' }}>
+      {/* Language toggle */}
+      <div style={{ display: 'flex', gap: '4px', marginBottom: '16px' }}>
+        {(['csharp', 'python'] as const).map(lang => (
+          <button
+            key={lang}
+            onClick={() => {
+              setLanguage(lang)
+              setCurrentIdx(0)
+              setProblemKey(k => k + 1)
+            }}
+            style={{
+              fontSize: '10px',
+              padding: '3px 12px',
+              borderRadius: '999px',
+              border: '0.5px solid',
+              borderColor: language === lang ? '#e8a0b0' : 'var(--border-secondary)',
+              background: language === lang ? '#fce8ed' : 'transparent',
+              color: language === lang ? '#9b2d45' : 'var(--text-muted)',
+              fontFamily: 'monospace',
+              cursor: 'pointer',
+              fontWeight: language === lang ? 500 : 400,
+            }}
+          >
+            {lang === 'csharp' ? 'C#' : 'Python'}
+          </button>
+        ))}
+      </div>
+
+      {/* Problem title */}
+      <div style={{ marginBottom: '16px' }}>
+        <h1 style={{ margin: '0 0 4px 0', fontSize: '22px', fontWeight: 500, color: 'var(--text-primary)' }}>
           {currentProblem.title}
         </h1>
-                  <span style={{
-            fontSize: '10px',
-            padding: '2px 8px',
-            borderRadius: '999px',
-            border: '0.5px solid var(--border-secondary)',
-            color: 'var(--text-muted)',
-            fontFamily: 'monospace',
-          }}>
-            C#
-          </span>
-        <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-secondary)', maxWidth: '480px' }}>
+        <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-secondary)', maxWidth: '480px' }}>
           {currentProblem.subtitle}
         </p>
       </div>
 
+      {/* Problem pills */}
       <div style={{
         display: 'flex',
         gap: '6px',
         flexWrap: 'wrap',
         marginBottom: '20px',
       }}>
-        {problems.map((p, i) => {
+        {filteredProblems.map((p, i) => {
           const isDone = !!progress[p.id]
           const isActive = i === currentIdx
           return (
@@ -141,6 +162,7 @@ export default function App() {
         })}
       </div>
 
+      {/* Problem screen */}
       <div style={{
         borderTop: '0.5px solid var(--border)',
         paddingTop: '20px',
@@ -151,6 +173,8 @@ export default function App() {
           onSolved={handleSolved}
         />
       </div>
+
+      {/* Footer */}
       <div style={{
         marginTop: '48px',
         paddingTop: '16px',

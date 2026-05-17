@@ -18,7 +18,7 @@ export type Problem = {
   title: string
   subtitle: string
   difficulty: 'easy' | 'medium' | 'hard'
-  language: 'csharp'
+  language: 'csharp' | 'python'
   sig: string
   steps: Step[]
 }
