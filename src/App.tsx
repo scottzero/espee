@@ -96,7 +96,7 @@ export default function App() {
             color: 'var(--text-muted)',
             fontFamily: 'Inter, system-ui, sans-serif',
           }}>
-            {displayXP.toLocaleString()} xp solved globally
+            global xp: {displayXP.toLocaleString()}
           </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
