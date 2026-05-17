@@ -34,4 +34,3 @@ npm run dev
 - [ ] Visual diagrams after solving (how the algorithm works)
 - [ ] User accounts + sync across devices
 - [ ] Additional languages (Java, Go, Rust)
-- [ ] Leaderboard
