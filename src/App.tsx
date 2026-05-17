@@ -7,7 +7,7 @@ export default function App() {
   const [progress, setProgress] = useState(() => loadProgress())
   const [currentIdx, setCurrentIdx] = useState(0)
   const [problemKey, setProblemKey] = useState(0)
-  const [language, setLanguage] = useState<'csharp' | 'python'>('csharp')
+  const [language, setLanguage] = useState<'csharp' | 'python' | 'javascript'>('csharp')
   const [xp, setXp] = useState(() => {
     const p = loadProgress()
     return Object.values(p).reduce((sum, v) => sum + v.timesSolved * 10, 0)
