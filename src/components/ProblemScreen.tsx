@@ -169,6 +169,30 @@ export default function ProblemScreen({ problem, onSolved }: Props) {
         >
           Reset step
         </button>
+
+        <button
+          onClick={() => {
+            setStepIdx(0)
+            setShuffledBlocks(shuffle(problem.steps[0].blocks))
+            setBlockStates(problem.steps[0].blocks.map(() => 'idle'))
+            setSelectedIdx(null)
+            setSnippets([])
+            setSolved(false)
+            setFeedback('Pick the block that fits this step, then hit Check.')
+            setFeedbackState('idle')
+          }}
+          style={{
+            padding: '8px 16px',
+            borderRadius: '8px',
+            border: '0.5px solid var(--border-secondary)',
+            background: 'transparent',
+            cursor: 'pointer',
+            fontSize: '13px',
+            color: 'var(--text-muted)',
+          }}
+        >
+          Reset problem
+        </button>
       </div>
 
       <FeedbackBar message={feedback} state={feedbackState} />
