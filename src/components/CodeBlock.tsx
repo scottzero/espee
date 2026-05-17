@@ -18,25 +18,24 @@ export default function CodeBlock({ code, state, onClick }: Props) {
     lineHeight: '1.6',
     whiteSpace: 'pre',
     width: '100%',
-    transition: 'all 0.15s',
     opacity: state === 'dimmed' ? 0.3 : 1,
     pointerEvents: state === 'dimmed' ? 'none' : 'auto',
     display: 'block',
     background:
-      state === 'selected' ? '#E6F1FB' :
-      state === 'correct'  ? '#EAF3DE' :
-      state === 'wrong'    ? '#FCEBEB' :
-      '#ffffff',
+      state === 'selected' ? 'var(--blue-bg)' :
+      state === 'correct'  ? 'var(--green-bg)' :
+      state === 'wrong'    ? 'var(--red-bg)' :
+      'var(--bg)',
     borderColor:
-      state === 'selected' ? '#378ADD' :
-      state === 'correct'  ? '#639922' :
-      state === 'wrong'    ? '#E24B4A' :
-      '#d0cfc8',
+      state === 'selected' ? 'var(--blue-border)' :
+      state === 'correct'  ? 'var(--green-border)' :
+      state === 'wrong'    ? 'var(--red-border)' :
+      'var(--border-secondary)',
     color:
-      state === 'selected' ? '#0C447C' :
-      state === 'correct'  ? '#27500A' :
-      state === 'wrong'    ? '#791F1F' :
-      '#1a1a1a',
+      state === 'selected' ? 'var(--blue-text)' :
+      state === 'correct'  ? 'var(--green-text)' :
+      state === 'wrong'    ? 'var(--red-text)' :
+      'var(--text-primary)',
   }
 
   return (

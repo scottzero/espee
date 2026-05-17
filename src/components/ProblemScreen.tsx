@@ -30,7 +30,7 @@ export default function ProblemScreen({ problem, onSolved }: Props) {
     return [...arr].sort(() => Math.random() - 0.5)
   }
 
-const [shuffledBlocks, setShuffledBlocks] = useState(() => shuffle(step.blocks))
+  const [shuffledBlocks, setShuffledBlocks] = useState(() => shuffle(step.blocks))
 
   function handleSelect(idx: number) {
     if (blockStates[idx] === 'dimmed') return
@@ -60,10 +60,7 @@ const [shuffledBlocks, setShuffledBlocks] = useState(() => shuffle(step.blocks))
       setFeedback('✓ ' + step.feedback.correct)
       setFeedbackState('correct')
       setSnippets(prev => [...prev, step.snippet])
-
-      if (isLastStep) {
-        setSolved(true)
-      }
+      if (isLastStep) setSolved(true)
     } else {
       const next = [...blockStates] as BlockState[]
       next[selectedIdx] = 'wrong'
@@ -75,19 +72,19 @@ const [shuffledBlocks, setShuffledBlocks] = useState(() => shuffle(step.blocks))
     }
   }
 
-function handleNext() {
-  if (solved) {
-    onSolved()
-    return
+  function handleNext() {
+    if (solved) {
+      onSolved()
+      return
+    }
+    const nextStep = stepIdx + 1
+    setStepIdx(nextStep)
+    setShuffledBlocks(shuffle(problem.steps[nextStep].blocks))
+    setBlockStates(problem.steps[nextStep].blocks.map(() => 'idle'))
+    setSelectedIdx(null)
+    setFeedback('Pick the block that fits this step, then hit Check.')
+    setFeedbackState('idle')
   }
-  const nextStep = stepIdx + 1
-  setStepIdx(nextStep)
-  setShuffledBlocks(shuffle(problem.steps[nextStep].blocks))
-  setBlockStates(problem.steps[nextStep].blocks.map(() => 'idle'))
-  setSelectedIdx(null)
-  setFeedback('Pick the block that fits this step, then hit Check.')
-  setFeedbackState('idle')
-}
 
   const showNext = feedbackState === 'correct'
 
@@ -99,8 +96,8 @@ function handleNext() {
         fontSize: '11px',
         padding: '3px 10px',
         borderRadius: '999px',
-        background: '#E6F1FB',
-        color: '#0C447C',
+        background: 'var(--blue-bg)',
+        color: 'var(--blue-text)',
         alignSelf: 'flex-start',
       }}>
         {step.prompt}
@@ -128,11 +125,11 @@ function handleNext() {
             style={{
               padding: '8px 16px',
               borderRadius: '8px',
-              border: '0.5px solid #d0cfc8',
-              background: '#ffffff',
+              border: '0.5px solid var(--border-secondary)',
+              background: 'var(--bg)',
               cursor: 'pointer',
               fontSize: '13px',
-              color: '#1a1a1a',
+              color: 'var(--text-primary)',
             }}
           >
             Check ↗
@@ -143,11 +140,11 @@ function handleNext() {
             style={{
               padding: '8px 16px',
               borderRadius: '8px',
-              border: '0.5px solid #639922',
-              background: '#EAF3DE',
+              border: '0.5px solid var(--green-border)',
+              background: 'var(--green-bg)',
               cursor: 'pointer',
               fontSize: '13px',
-              color: '#27500A',
+              color: 'var(--green-text)',
             }}
           >
             {solved ? 'Problem solved! Next →' : 'Next step →'}
@@ -163,11 +160,11 @@ function handleNext() {
           style={{
             padding: '8px 16px',
             borderRadius: '8px',
-            border: '0.5px solid #d0cfc8',
+            border: '0.5px solid var(--border-secondary)',
             background: 'transparent',
             cursor: 'pointer',
             fontSize: '13px',
-            color: '#6b6a65',
+            color: 'var(--text-secondary)',
           }}
         >
           Reset step
@@ -177,7 +174,7 @@ function handleNext() {
       <FeedbackBar message={feedback} state={feedbackState} />
 
       <div style={{
-        borderTop: '0.5px solid #e5e4e0',
+        borderTop: '0.5px solid var(--border)',
         paddingTop: '16px',
       }}>
         <FunctionPreview

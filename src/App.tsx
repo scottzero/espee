@@ -11,8 +11,15 @@ export default function App() {
     const p = loadProgress()
     return Object.values(p).reduce((sum, v) => sum + v.timesSolved * 10, 0)
   })
+  const [dark, setDark] = useState(false)
 
   const currentProblem = problems[currentIdx]
+
+  function toggleDark() {
+    const next = !dark
+    setDark(next)
+    document.documentElement.setAttribute('data-theme', next ? 'dark' : 'light')
+  }
 
   function handleSelectProblem(idx: number) {
     if (idx === currentIdx) return
@@ -35,6 +42,7 @@ export default function App() {
       margin: '0 auto',
       padding: '24px 16px',
       fontFamily: 'system-ui, sans-serif',
+      color: 'var(--text-primary)',
     }}>
 
       <div style={{
@@ -44,18 +52,39 @@ export default function App() {
         marginBottom: '20px',
       }}>
         <div>
-          <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 500 }}>
+          <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 500, color: 'var(--text-primary)' }}>
             {currentProblem.title}
           </h1>
-          <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#6b6a65', maxWidth: '480px' }}>
+          <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-secondary)', maxWidth: '480px' }}>
             {currentProblem.subtitle}
           </p>
         </div>
-        <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: '20px', fontWeight: 500 }}>{xp} XP</div>
-          <div style={{ fontSize: '11px', color: '#6b6a65' }}>
-            {Object.keys(progress).length} solved
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)' }}>{xp} XP</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+              {Object.keys(progress).length} solved
+            </div>
           </div>
+          <button
+            onClick={toggleDark}
+            title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+            style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '50%',
+              border: '0.5px solid var(--border-secondary)',
+              background: 'var(--bg-secondary)',
+              cursor: 'pointer',
+              fontSize: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            {dark ? '☀️' : '🌙'}
+          </button>
         </div>
       </div>
 
@@ -77,9 +106,9 @@ export default function App() {
                 padding: '4px 10px',
                 borderRadius: '999px',
                 border: '0.5px solid',
-                borderColor: isActive ? '#378ADD' : isDone ? '#639922' : '#d0cfc8',
-                background: isActive ? '#E6F1FB' : isDone ? '#EAF3DE' : '#f8f7f4',
-                color: isActive ? '#0C447C' : isDone ? '#27500A' : '#6b6a65',
+                borderColor: isActive ? 'var(--blue-border)' : isDone ? 'var(--green-border)' : 'var(--border-secondary)',
+                background: isActive ? 'var(--blue-bg)' : isDone ? 'var(--green-bg)' : 'var(--bg-secondary)',
+                color: isActive ? 'var(--blue-text)' : isDone ? 'var(--green-text)' : 'var(--text-secondary)',
                 fontWeight: isActive ? 500 : 400,
                 cursor: 'pointer',
               }}
@@ -91,7 +120,7 @@ export default function App() {
       </div>
 
       <div style={{
-        borderTop: '0.5px solid #e5e4e0',
+        borderTop: '0.5px solid var(--border)',
         paddingTop: '20px',
       }}>
         <ProblemScreen

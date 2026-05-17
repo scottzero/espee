@@ -14,17 +14,17 @@ export default function FeedbackBar({ message, state }: Props) {
     lineHeight: '1.6',
     minHeight: '40px',
     borderColor:
-      state === 'correct' ? '#639922' :
-      state === 'wrong'   ? '#E24B4A' :
-      '#d0cfc8',
+      state === 'correct' ? 'var(--green-border)' :
+      state === 'wrong'   ? 'var(--red-border)' :
+      'var(--border)',
     background:
-      state === 'correct' ? '#EAF3DE' :
-      state === 'wrong'   ? '#FCEBEB' :
-      '#f8f7f4',
+      state === 'correct' ? 'var(--green-bg)' :
+      state === 'wrong'   ? 'var(--red-bg)' :
+      'var(--bg-secondary)',
     color:
-      state === 'correct' ? '#27500A' :
-      state === 'wrong'   ? '#791F1F' :
-      '#6b6a65',
+      state === 'correct' ? 'var(--green-text)' :
+      state === 'wrong'   ? 'var(--red-text)' :
+      'var(--text-secondary)',
   }
 
   return (
