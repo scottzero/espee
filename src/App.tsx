@@ -95,6 +95,16 @@ export default function App() {
         <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 500, color: 'var(--text-primary)' }}>
           {currentProblem.title}
         </h1>
+                  <span style={{
+            fontSize: '10px',
+            padding: '2px 8px',
+            borderRadius: '999px',
+            border: '0.5px solid var(--border-secondary)',
+            color: 'var(--text-muted)',
+            fontFamily: 'monospace',
+          }}>
+            C#
+          </span>
         <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-secondary)', maxWidth: '480px' }}>
           {currentProblem.subtitle}
         </p>
