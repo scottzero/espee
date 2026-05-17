@@ -225,6 +225,7 @@ export default function App() {
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
           <a href="https://x.com/espeeapp" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>Twitter</a>
           <a href="https://bsky.app/profile/espeeapp.bsky.social" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>Bluesky</a>
+          <a href="https://ko-fi.com/espeeapp" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>Support ☕</a>
           <a href="https://www.linkedin.com/in/scottpayton1337/" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>LinkedIn</a>
           <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>espee — a muscle memory app</span>
         </div>
