@@ -33,4 +33,4 @@ npm run dev
 - [ ] Progress screen (solve history, streaks, XP over time)
 - [ ] Visual diagrams after solving (how the algorithm works)
 - [ ] User accounts + sync across devices
-- [ ] Additional languages (Java, Go, Rust)
+- [ ] Additional languages (Java, Go, Rust, test)
