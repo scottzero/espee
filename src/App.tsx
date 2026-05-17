@@ -173,9 +173,8 @@ export default function App() {
           onSolved={handleSolved}
         />
       </div>
-
-      {/* Footer */}
-      <div style={{
+{/* Footer */}
+<div style={{
         marginTop: '48px',
         paddingTop: '16px',
         borderTop: '0.5px solid var(--border)',
@@ -186,11 +185,13 @@ export default function App() {
         <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
           © 2026 Scott Payton
         </span>
-        <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-          espee — a muscle memory app
-        </span>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <a href="https://x.com/espeeapp" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>Twitter</a>
+          <a href="https://bsky.app/profile/espeeapp.bsky.social" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>Bsky</a>
+          <a href="https://www.linkedin.com/in/scottpayton1337/?skipRedirect=true" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>LinkedIn</a>
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>espee — a muscle memory app</span>
+        </div>
       </div>
-
     </div>
   )
 }
