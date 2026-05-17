@@ -1495,5 +1495,753 @@ export const problems: Problem[] = [
         snippet: '    return False'
       }
     ]
+  },
+  {
+    id: 'twosum_js',
+    title: 'Two Sum',
+    subtitle: 'Given an array and a target, return indices of two numbers that add up to the target.',
+    difficulty: 'easy',
+    language: 'javascript',
+    sig: 'function twoSum(nums, target) {',
+    steps: [
+      {
+        prompt: 'Step 1 — what data structure do we use to track seen numbers?',
+        blocks: [
+          { code: 'const map = new Map();', correct: true },
+          { code: 'const map = {};', correct: false },
+          { code: 'const seen = [];', correct: false },
+          { code: 'const seen = new Set();', correct: false },
+        ],
+        feedback: {
+          correct: 'Map gives us O(1) get/set with any key type. Clean and explicit for this pattern.',
+          wrong: {
+            'const map = {};': 'A plain object works but Map is preferred — cleaner API with .has() and .get() instead of checking undefined.',
+            'const seen = [];': 'Array lookup is O(n) — we\'d be doing O(n) work inside an O(n) loop, making it O(n²) total.',
+            'const seen = new Set();': 'Set only stores values, not key/value pairs. We need to store the index too.',
+          }
+        },
+        snippet: '  const map = new Map();'
+      },
+      {
+        prompt: 'Step 2 — loop with index and value',
+        blocks: [
+          { code: 'for (let i = 0; i < nums.length; i++) {', correct: true },
+          { code: 'for (const num of nums) {', correct: false },
+          { code: 'nums.forEach(num => {', correct: false },
+          { code: 'for (let i = 1; i < nums.length; i++) {', correct: false },
+        ],
+        feedback: {
+          correct: 'Standard for loop gives us both index i and value nums[i] — we need both to return the answer.',
+          wrong: {
+            'for (const num of nums) {': 'for...of loses track of the index. We need i to return it as part of the answer.',
+            'nums.forEach(num => {': 'forEach loses the index unless you add a second parameter. Also can\'t return early from forEach.',
+            'for (let i = 1; i < nums.length; i++) {': 'Starting at 1 skips nums[0] — the answer could involve the first element.',
+          }
+        },
+        snippet: '  for (let i = 0; i < nums.length; i++) {'
+      },
+      {
+        prompt: 'Step 3 — find the complement and check if we\'ve seen it',
+        blocks: [
+          { code: 'const complement = target - nums[i];\nif (map.has(complement)) {', correct: true },
+          { code: 'const complement = nums[i] - target;\nif (map.has(complement)) {', correct: false },
+          { code: 'if (map.has(nums[i])) {', correct: false },
+          { code: 'const complement = target - nums[i];\nif (map[complement]) {', correct: false },
+        ],
+        feedback: {
+          correct: 'complement = target - nums[i] is the number we need. map.has() checks in O(1).',
+          wrong: {
+            'const complement = nums[i] - target;\nif (map.has(complement)) {': 'Subtraction is flipped. target=9, nums[i]=7 → we need 9-7=2, not 7-9=-2.',
+            'if (map.has(nums[i])) {': 'This checks if the current number is in the map — we want to check if its complement is.',
+            'const complement = target - nums[i];\nif (map[complement]) {': 'map is a Map object, not a plain object. Use map.has() not bracket notation.',
+          }
+        },
+        snippet: '    const complement = target - nums[i];\n    if (map.has(complement)) {'
+      },
+      {
+        prompt: 'Step 4 — return the answer and store the current number',
+        blocks: [
+          { code: '    return [map.get(complement), i];\n  }\n  map.set(nums[i], i);', correct: true },
+          { code: '    return [i, complement];\n  }\n  map.set(nums[i], i);', correct: false },
+          { code: '    return [map.get(complement), i];\n  }\n  map.set(i, nums[i]);', correct: false },
+          { code: '    return map.get(complement);\n  }\n  map.set(nums[i], i);', correct: false },
+        ],
+        feedback: {
+          correct: 'map.get(complement) retrieves the index where we saw the complement. i is current. map.set stores num→index after the check.',
+          wrong: {
+            '    return [i, complement];\n  }\n  map.set(nums[i], i);': 'complement is a number value, not an index. map.get(complement) gives the index.',
+            '    return [map.get(complement), i];\n  }\n  map.set(i, nums[i]);': 'Map is keyed by number. map.set(i, nums[i]) flips it — lookup would break.',
+            '    return map.get(complement);\n  }\n  map.set(nums[i], i);': 'We need to return an array of two indices, not just one number.',
+          }
+        },
+        snippet: '      return [map.get(complement), i];\n    }\n    map.set(nums[i], i);\n  }\n}'
+      }
+    ]
+  },
+  {
+    id: 'validpalindrome_js',
+    title: 'Valid Palindrome',
+    subtitle: 'Given a string, return true if it reads the same forwards and backwards (ignoring case and non-alphanumeric chars).',
+    difficulty: 'easy',
+    language: 'javascript',
+    sig: 'function isPalindrome(s) {',
+    steps: [
+      {
+        prompt: 'Step 1 — set up two pointers',
+        blocks: [
+          { code: 'let left = 0, right = s.length - 1;', correct: true },
+          { code: 'let left = 0, right = s.length;', correct: false },
+          { code: 'let left = 0, right = 1;', correct: false },
+          { code: 'const arr = s.split(\'\');', correct: false },
+        ],
+        feedback: {
+          correct: 'Two pointers starting at both ends walking inward — the classic palindrome pattern.',
+          wrong: {
+            'let left = 0, right = s.length;': 's.length is out of bounds. Last valid index is s.length - 1.',
+            'let left = 0, right = 1;': 'right=1 starts adjacent to left, not at the end.',
+            'const arr = s.split(\'\');': 'We can index strings directly in JS — no need to split into an array.',
+          }
+        },
+        snippet: '  let left = 0, right = s.length - 1;'
+      },
+      {
+        prompt: 'Step 2 — loop and skip non-alphanumeric characters',
+        blocks: [
+          { code: 'while (left < right) {\n  while (left < right && !s[left].match(/[a-z0-9]/i)) left++;\n  while (left < right && !s[right].match(/[a-z0-9]/i)) right--;', correct: true },
+          { code: 'while (left < right) {\n  s = s.replace(/[^a-z0-9]/gi, \'\');', correct: false },
+          { code: 'while (left < right) {\n  if (!s[left].match(/[a-z0-9]/i)) left++;', correct: false },
+          { code: 'while (left < right) {\n  while (!s[left].match(/[a-z0-9]/i)) left++;\n  while (!s[right].match(/[a-z0-9]/i)) right--;', correct: false },
+        ],
+        feedback: {
+          correct: 'Regex /[a-z0-9]/i matches alphanumeric chars. The left < right guard inside each while prevents overstepping.',
+          wrong: {
+            'while (left < right) {\n  s = s.replace(/[^a-z0-9]/gi, \'\');': 'Rebuilding the string inside the loop is O(n²). Two-pointer skipping is O(n).',
+            'while (left < right) {\n  if (!s[left].match(/[a-z0-9]/i)) left++;': 'if only moves one step — need a while loop to skip multiple non-alphanumeric chars.',
+            'while (left < right) {\n  while (!s[left].match(/[a-z0-9]/i)) left++;\n  while (!s[right].match(/[a-z0-9]/i)) right--;': 'Missing the left < right guard inside inner whiles — left could overshoot past right.',
+          }
+        },
+        snippet: '  while (left < right) {\n    while (left < right && !s[left].match(/[a-z0-9]/i)) left++;\n    while (left < right && !s[right].match(/[a-z0-9]/i)) right--;'
+      },
+      {
+        prompt: 'Step 3 — compare characters and move pointers',
+        blocks: [
+          { code: 'if (s[left].toLowerCase() !== s[right].toLowerCase()) return false;\nleft++; right--;', correct: true },
+          { code: 'if (s[left] !== s[right]) return false;\nleft++; right--;', correct: false },
+          { code: 'if (s[left].toLowerCase() === s[right].toLowerCase()) return true;\nleft++; right--;', correct: false },
+          { code: 'left++; right--;\nif (s[left].toLowerCase() !== s[right].toLowerCase()) return false;', correct: false },
+        ],
+        feedback: {
+          correct: 'toLowerCase() on both sides handles case. Mismatch → return false. Otherwise advance both pointers.',
+          wrong: {
+            'if (s[left] !== s[right]) return false;\nleft++; right--;': 'Missing case normalization. "A" !== "a" would wrongly fail.',
+            'if (s[left].toLowerCase() === s[right].toLowerCase()) return true;\nleft++; right--;': 'One matching pair doesn\'t make the whole thing a palindrome.',
+            'left++; right--;\nif (s[left].toLowerCase() !== s[right].toLowerCase()) return false;': 'Advancing before comparing skips the current characters.',
+          }
+        },
+        snippet: '    if (s[left].toLowerCase() !== s[right].toLowerCase()) return false;\n    left++; right--;\n  }'
+      },
+      {
+        prompt: 'Step 4 — return if no mismatch found',
+        blocks: [
+          { code: 'return true;', correct: true },
+          { code: 'return false;', correct: false },
+          { code: 'return left === right;', correct: false },
+          { code: 'return s[left] === s[right];', correct: false },
+        ],
+        feedback: {
+          correct: 'If we made it through the whole loop without a mismatch, it\'s a palindrome.',
+          wrong: {
+            'return false;': 'If we reach this line we never found a mismatch — returning false wrongly rejects valid palindromes.',
+            'return left === right;': 'When the loop exits left >= right. For even length strings this returns false incorrectly.',
+            'return s[left] === s[right];': 'When the loop exits the pointers have crossed — comparing wrong characters.',
+          }
+        },
+        snippet: '  return true;\n}'
+      }
+    ]
+  },
+  {
+    id: 'besttime_js',
+    title: 'Best Time to Buy & Sell Stock',
+    subtitle: 'Given prices[], find the max profit from buying on one day and selling on a later day.',
+    difficulty: 'easy',
+    language: 'javascript',
+    sig: 'function maxProfit(prices) {',
+    steps: [
+      {
+        prompt: 'Step 1 — initialize tracking variables',
+        blocks: [
+          { code: 'let minPrice = Infinity, maxProfit = 0;', correct: true },
+          { code: 'let minPrice = 0, maxProfit = 0;', correct: false },
+          { code: 'let minPrice = prices[0], maxProfit = prices[1];', correct: false },
+          { code: 'let minPrice = Infinity, maxProfit = -Infinity;', correct: false },
+        ],
+        feedback: {
+          correct: 'Infinity for minPrice means the first real price will always be smaller. maxProfit starts at 0 — no trade is always an option.',
+          wrong: {
+            'let minPrice = 0, maxProfit = 0;': 'minPrice=0 means no price will ever be lower, so minPrice never updates.',
+            'let minPrice = prices[0], maxProfit = prices[1];': 'This assumes the answer involves index 0 and 1 — the best pair could be anywhere.',
+            'let minPrice = Infinity, maxProfit = -Infinity;': 'maxProfit=-Infinity would force a negative return even when the answer is 0.',
+          }
+        },
+        snippet: '  let minPrice = Infinity, maxProfit = 0;'
+      },
+      {
+        prompt: 'Step 2 — loop and update minPrice and maxProfit',
+        blocks: [
+          { code: 'for (const price of prices) {\n  minPrice = Math.min(minPrice, price);\n  maxProfit = Math.max(maxProfit, price - minPrice);\n}', correct: true },
+          { code: 'for (const price of prices) {\n  maxProfit = Math.max(maxProfit, price - minPrice);\n  minPrice = Math.min(minPrice, price);\n}', correct: false },
+          { code: 'for (let i = 0; i < prices.length; i++)\n  for (let j = i+1; j < prices.length; j++)\n    maxProfit = Math.max(maxProfit, prices[j]-prices[i]);', correct: false },
+          { code: 'for (const price of prices)\n  if (price > minPrice) maxProfit = price - minPrice;\n  else minPrice = price;', correct: false },
+        ],
+        feedback: {
+          correct: 'One pass: update minPrice first, then compute profit. O(n) time, O(1) space.',
+          wrong: {
+            'for (const price of prices) {\n  maxProfit = Math.max(maxProfit, price - minPrice);\n  minPrice = Math.min(minPrice, price);\n}': 'Order matters! Update maxProfit before minPrice — on first iteration minPrice is still Infinity.',
+            'for (let i = 0; i < prices.length; i++)\n  for (let j = i+1; j < prices.length; j++)\n    maxProfit = Math.max(maxProfit, prices[j]-prices[i]);': 'Correct logic but O(n²). The one-pass approach is expected.',
+            'for (const price of prices)\n  if (price > minPrice) maxProfit = price - minPrice;\n  else minPrice = price;': 'maxProfit is overwritten not accumulated — a later smaller profit erases a bigger earlier one.',
+          }
+        },
+        snippet: '  for (const price of prices) {\n    minPrice = Math.min(minPrice, price);\n    maxProfit = Math.max(maxProfit, price - minPrice);\n  }'
+      },
+      {
+        prompt: 'Step 3 — return the answer',
+        blocks: [
+          { code: 'return maxProfit;', correct: true },
+          { code: 'return maxProfit - minPrice;', correct: false },
+          { code: 'return minPrice;', correct: false },
+          { code: 'return Math.max(0, maxProfit);', correct: false },
+        ],
+        feedback: {
+          correct: 'maxProfit already holds the best answer.',
+          wrong: {
+            'return maxProfit - minPrice;': 'maxProfit is already a profit value. Subtracting minPrice again is meaningless.',
+            'return minPrice;': 'minPrice is the cheapest buying day, not the profit.',
+            'return Math.max(0, maxProfit);': 'Not wrong but redundant — maxProfit is already >= 0 by design.',
+          }
+        },
+        snippet: '  return maxProfit;\n}'
+      }
+    ]
+  },
+  {
+    id: 'containsduplicate_js',
+    title: 'Contains Duplicate',
+    subtitle: 'Given an integer array, return true if any value appears at least twice.',
+    difficulty: 'easy',
+    language: 'javascript',
+    sig: 'function containsDuplicate(nums) {',
+    steps: [
+      {
+        prompt: 'Step 1 — what data structure tracks what we have seen?',
+        blocks: [
+          { code: 'const seen = new Set();', correct: true },
+          { code: 'const seen = new Map();', correct: false },
+          { code: 'const seen = [];', correct: false },
+          { code: 'const seen = {};', correct: false },
+        ],
+        feedback: {
+          correct: 'Set is perfect — we only need membership testing, not key/value pairs. O(1) lookup.',
+          wrong: {
+            'const seen = new Map();': 'Map works but is overkill — we don\'t need key/value pairs, just membership testing.',
+            'const seen = [];': 'Array lookup with includes() is O(n) — O(n²) total inside a loop.',
+            'const seen = {};': 'Plain object works but Set is cleaner and more semantically correct for this use case.',
+          }
+        },
+        snippet: '  const seen = new Set();'
+      },
+      {
+        prompt: 'Step 2 — loop and check for duplicates',
+        blocks: [
+          { code: 'for (const n of nums) {\n  if (seen.has(n)) return true;\n  seen.add(n);\n}', correct: true },
+          { code: 'for (const n of nums) {\n  seen.add(n);\n  if (seen.has(n)) return true;\n}', correct: false },
+          { code: 'return new Set(nums).size !== nums.length;', correct: false },
+          { code: 'for (const n of nums) {\n  seen.add(n);\n}', correct: false },
+        ],
+        feedback: {
+          correct: 'Check first, then add. If n is already in seen before we add it, it\'s a duplicate.',
+          wrong: {
+            'for (const n of nums) {\n  seen.add(n);\n  if (seen.has(n)) return true;\n}': 'Adding before checking means n is always in seen — always returns true on the second element.',
+            'return new Set(nums).size !== nums.length;': 'Clever one-liner and correct, but creates a whole new Set in memory. The explicit loop is more interview-friendly.',
+            'for (const n of nums) {\n  seen.add(n);\n}': 'Adds everything but never checks for duplicates.',
+          }
+        },
+        snippet: '  for (const n of nums) {\n    if (seen.has(n)) return true;\n    seen.add(n);\n  }'
+      },
+      {
+        prompt: 'Step 3 — return if no duplicate found',
+        blocks: [
+          { code: 'return false;', correct: true },
+          { code: 'return true;', correct: false },
+          { code: 'return seen.size > 0;', correct: false },
+          { code: 'return nums.length > 0;', correct: false },
+        ],
+        feedback: {
+          correct: 'If we made it through the whole loop without finding a duplicate, there are none.',
+          wrong: {
+            'return true;': 'If we reach this line we never found a duplicate — wrongly reports a duplicate.',
+            'return seen.size > 0;': 'seen always has elements if array is non-empty. Doesn\'t tell us about duplicates.',
+            'return nums.length > 0;': 'Array length has nothing to do with duplicates.',
+          }
+        },
+        snippet: '  return false;\n}'
+      }
+    ]
+  },
+  {
+    id: 'maxsubarray_js',
+    title: 'Maximum Subarray',
+    subtitle: 'Find the contiguous subarray with the largest sum and return its sum.',
+    difficulty: 'easy',
+    language: 'javascript',
+    sig: 'function maxSubArray(nums) {',
+    steps: [
+      {
+        prompt: 'Step 1 — initialize current and best sum',
+        blocks: [
+          { code: 'let current = nums[0], best = nums[0];', correct: true },
+          { code: 'let current = 0, best = 0;', correct: false },
+          { code: 'let current = -Infinity, best = -Infinity;', correct: false },
+          { code: 'let current = nums[0], best = -Infinity;', correct: false },
+        ],
+        feedback: {
+          correct: 'Starting both at nums[0] handles all-negative arrays — the answer is always at least the largest single element.',
+          wrong: {
+            'let current = 0, best = 0;': 'Starting at 0 breaks for all-negative arrays. [-3,-2,-1] should return -1 but would return 0.',
+            'let current = -Infinity, best = -Infinity;': 'Works but unnecessarily complex. nums[0] is the clean starting point.',
+            'let current = nums[0], best = -Infinity;': 'best = -Infinity works but is inconsistent — just start both at nums[0].',
+          }
+        },
+        snippet: '  let current = nums[0], best = nums[0];'
+      },
+      {
+        prompt: 'Step 2 — loop from index 1 and apply Kadane\'s algorithm',
+        blocks: [
+          { code: 'for (let i = 1; i < nums.length; i++) {\n  current = Math.max(nums[i], current + nums[i]);\n  best = Math.max(best, current);\n}', correct: true },
+          { code: 'for (let i = 1; i < nums.length; i++) {\n  current = current + nums[i];\n  best = Math.max(best, current);\n}', correct: false },
+          { code: 'for (let i = 0; i < nums.length; i++) {\n  current = Math.max(nums[i], current + nums[i]);\n  best = Math.max(best, current);\n}', correct: false },
+          { code: 'for (let i = 1; i < nums.length; i++) {\n  current = Math.max(nums[i], current + nums[i]);\n}', correct: false },
+        ],
+        feedback: {
+          correct: 'Kadane\'s: at each element decide to extend or start fresh. Starting at i=1 skips the first element we already used.',
+          wrong: {
+            'for (let i = 1; i < nums.length; i++) {\n  current = current + nums[i];\n  best = Math.max(best, current);\n}': 'Missing the "start fresh" decision. If current goes very negative we should reset.',
+            'for (let i = 0; i < nums.length; i++) {\n  current = Math.max(nums[i], current + nums[i]);\n  best = Math.max(best, current);\n}': 'Starting at i=0 re-processes the first element we already used to initialize.',
+            'for (let i = 1; i < nums.length; i++) {\n  current = Math.max(nums[i], current + nums[i]);\n}': 'Never updates best — returns the last current value, not the maximum.',
+          }
+        },
+        snippet: '  for (let i = 1; i < nums.length; i++) {\n    current = Math.max(nums[i], current + nums[i]);\n    best = Math.max(best, current);\n  }'
+      },
+      {
+        prompt: 'Step 3 — return the answer',
+        blocks: [
+          { code: 'return best;', correct: true },
+          { code: 'return current;', correct: false },
+          { code: 'return Math.max(best, current);', correct: false },
+          { code: 'return best - current;', correct: false },
+        ],
+        feedback: {
+          correct: 'best tracked the maximum sum across all iterations — that\'s our answer.',
+          wrong: {
+            'return current;': 'current is just the sum ending at the last element, not the global maximum.',
+            'return Math.max(best, current);': 'best is already always >= current — the Math.max is redundant.',
+            'return best - current;': 'Subtracting current from best has no meaning here.',
+          }
+        },
+        snippet: '  return best;\n}'
+      }
+    ]
+  },
+  {
+    id: 'slidingwindowmax_js',
+    title: 'Longest Substring Without Repeating',
+    subtitle: 'Given a string, find the length of the longest substring without repeating characters.',
+    difficulty: 'medium',
+    language: 'javascript',
+    sig: 'function lengthOfLongestSubstring(s) {',
+    steps: [
+      {
+        prompt: 'Step 1 — set up sliding window variables',
+        blocks: [
+          { code: 'const seen = new Map();\nlet best = 0, left = 0;', correct: true },
+          { code: 'const seen = new Set();\nlet best = 0;', correct: false },
+          { code: 'const seen = new Map();\nlet best = 0;', correct: false },
+          { code: 'const seen = [];\nlet best = 0, left = 0;', correct: false },
+        ],
+        feedback: {
+          correct: 'Map stores last seen index of each character. left tracks window start. best tracks max length.',
+          wrong: {
+            'const seen = new Set();\nlet best = 0;': 'Set tells us if a char exists but not where. Without the index we can\'t jump left correctly.',
+            'const seen = new Map();\nlet best = 0;': 'Missing left — we need to track where our current window starts.',
+            'const seen = [];\nlet best = 0, left = 0;': 'Array lookup is O(n). Map gives O(1) lookup.',
+          }
+        },
+        snippet: '  const seen = new Map();\n  let best = 0, left = 0;'
+      },
+      {
+        prompt: 'Step 2 — loop and expand the window',
+        blocks: [
+          { code: 'for (let right = 0; right < s.length; right++) {\n  if (seen.has(s[right]))\n    left = Math.max(left, seen.get(s[right]) + 1);\n  seen.set(s[right], right);\n  best = Math.max(best, right - left + 1);\n}', correct: true },
+          { code: 'for (let right = 0; right < s.length; right++) {\n  if (seen.has(s[right]))\n    left = seen.get(s[right]) + 1;\n  seen.set(s[right], right);\n  best = Math.max(best, right - left + 1);\n}', correct: false },
+          { code: 'for (let right = 0; right < s.length; right++) {\n  while (seen.has(s[right])) {\n    seen.delete(s[left]);\n    left++;\n  }\n  seen.set(s[right], right);\n  best = Math.max(best, right - left + 1);\n}', correct: false },
+          { code: 'for (let right = 0; right < s.length; right++) {\n  if (seen.has(s[right]))\n    left = Math.max(left, seen.get(s[right]) + 1);\n  best = Math.max(best, right - left + 1);\n}', correct: false },
+        ],
+        feedback: {
+          correct: 'Math.max(left, seen.get(s[right]) + 1) prevents left from jumping backward if the duplicate is outside our window.',
+          wrong: {
+            'for (let right = 0; right < s.length; right++) {\n  if (seen.has(s[right]))\n    left = seen.get(s[right]) + 1;\n  seen.set(s[right], right);\n  best = Math.max(best, right - left + 1);\n}': 'Missing Math.max — left could jump backward if duplicate was seen before current window.',
+            'for (let right = 0; right < s.length; right++) {\n  while (seen.has(s[right])) {\n    seen.delete(s[left]);\n    left++;\n  }\n  seen.set(s[right], right);\n  best = Math.max(best, right - left + 1);\n}': 'Works but O(n²) worst case — deleting one char at a time. Jumping left directly is O(n).',
+            'for (let right = 0; right < s.length; right++) {\n  if (seen.has(s[right]))\n    left = Math.max(left, seen.get(s[right]) + 1);\n  best = Math.max(best, right - left + 1);\n}': 'Never updates seen — stale indices break future lookups.',
+          }
+        },
+        snippet: '  for (let right = 0; right < s.length; right++) {\n    if (seen.has(s[right]))\n      left = Math.max(left, seen.get(s[right]) + 1);\n    seen.set(s[right], right);\n    best = Math.max(best, right - left + 1);\n  }'
+      },
+      {
+        prompt: 'Step 3 — return the answer',
+        blocks: [
+          { code: 'return best;', correct: true },
+          { code: 'return s.length - left;', correct: false },
+          { code: 'return seen.size;', correct: false },
+          { code: 'return best - left;', correct: false },
+        ],
+        feedback: {
+          correct: 'best holds the maximum window size we ever saw.',
+          wrong: {
+            'return s.length - left;': 'Gives length of final window only, not the maximum.',
+            'return seen.size;': 'seen.size is unique chars in last window, not longest window length.',
+            'return best - left;': 'best is a length not an index. Subtracting left makes no sense.',
+          }
+        },
+        snippet: '  return best;\n}'
+      }
+    ]
+  },
+  {
+    id: 'binarysearch_js',
+    title: 'Binary Search',
+    subtitle: 'Given a sorted array and a target, return its index or -1 if not found.',
+    difficulty: 'medium',
+    language: 'javascript',
+    sig: 'function search(nums, target) {',
+    steps: [
+      {
+        prompt: 'Step 1 — initialize left and right pointers',
+        blocks: [
+          { code: 'let left = 0, right = nums.length - 1;', correct: true },
+          { code: 'let left = 0, right = nums.length;', correct: false },
+          { code: 'let left = 1, right = nums.length - 1;', correct: false },
+          { code: 'let left = 0, right = nums.length / 2;', correct: false },
+        ],
+        feedback: {
+          correct: 'left starts at 0, right at last valid index. Both ends of the search space.',
+          wrong: {
+            'let left = 0, right = nums.length;': 'nums.length is out of bounds. Last valid index is nums.length - 1.',
+            'let left = 1, right = nums.length - 1;': 'Starting left at 1 skips nums[0] — target could be first element.',
+            'let left = 0, right = nums.length / 2;': 'Only searches left half. Target could be anywhere.',
+          }
+        },
+        snippet: '  let left = 0, right = nums.length - 1;'
+      },
+      {
+        prompt: 'Step 2 — loop and compute midpoint',
+        blocks: [
+          { code: 'while (left <= right) {\n  const mid = left + Math.floor((right - left) / 2);', correct: true },
+          { code: 'while (left < right) {\n  const mid = left + Math.floor((right - left) / 2);', correct: false },
+          { code: 'while (left <= right) {\n  const mid = Math.floor((left + right) / 2);', correct: false },
+          { code: 'while (left <= right) {\n  const mid = left + (right - left);', correct: false },
+        ],
+        feedback: {
+          correct: 'left <= right includes single element case. Math.floor((right-left)/2) added to left avoids overflow.',
+          wrong: {
+            'while (left < right) {\n  const mid = left + Math.floor((right - left) / 2);': 'left < right misses the case where left === right — skips the last element.',
+            'while (left <= right) {\n  const mid = Math.floor((left + right) / 2);': 'JS numbers don\'t overflow like integers but left + (right-left)/2 is better practice.',
+            'while (left <= right) {\n  const mid = left + (right - left);': 'This computes right not the midpoint. Loop never converges.',
+          }
+        },
+        snippet: '  while (left <= right) {\n    const mid = left + Math.floor((right - left) / 2);'
+      },
+      {
+        prompt: 'Step 3 — check mid and move pointers',
+        blocks: [
+          { code: 'if (nums[mid] === target) return mid;\nelse if (nums[mid] < target) left = mid + 1;\nelse right = mid - 1;', correct: true },
+          { code: 'if (nums[mid] === target) return mid;\nelse if (nums[mid] < target) left = mid;\nelse right = mid;', correct: false },
+          { code: 'if (nums[mid] > target) left = mid + 1;\nelse right = mid - 1;', correct: false },
+          { code: 'if (nums[mid] === target) return mid;\nelse if (nums[mid] > target) left = mid + 1;\nelse right = mid - 1;', correct: false },
+        ],
+        feedback: {
+          correct: 'Found → return mid. Too small → search right. Too big → search left.',
+          wrong: {
+            'if (nums[mid] === target) return mid;\nelse if (nums[mid] < target) left = mid;\nelse right = mid;': 'left = mid and right = mid don\'t make progress — infinite loop.',
+            'if (nums[mid] > target) left = mid + 1;\nelse right = mid - 1;': 'Never checks if nums[mid] === target — skips past the answer.',
+            'if (nums[mid] === target) return mid;\nelse if (nums[mid] > target) left = mid + 1;\nelse right = mid - 1;': 'Comparisons flipped — if nums[mid] > target search LEFT not right.',
+          }
+        },
+        snippet: '    if (nums[mid] === target) return mid;\n    else if (nums[mid] < target) left = mid + 1;\n    else right = mid - 1;\n  }'
+      },
+      {
+        prompt: 'Step 4 — return if target not found',
+        blocks: [
+          { code: 'return -1;', correct: true },
+          { code: 'return 0;', correct: false },
+          { code: 'return left;', correct: false },
+          { code: 'return null;', correct: false },
+        ],
+        feedback: {
+          correct: '-1 is the convention for "not found" — not a valid index so unambiguous.',
+          wrong: {
+            'return 0;': '0 is a valid index — ambiguous between "found at 0" and "not found".',
+            'return left;': 'left is where target would be inserted. That\'s Search Insert Position.',
+            'return null;': 'Function should return a number. null would cause type issues.',
+          }
+        },
+        snippet: '  return -1;\n}'
+      }
+    ]
+  },
+  {
+    id: 'climbingstairs_js',
+    title: 'Climbing Stairs',
+    subtitle: 'You can climb 1 or 2 steps at a time. How many distinct ways can you climb n stairs?',
+    difficulty: 'medium',
+    language: 'javascript',
+    sig: 'function climbStairs(n) {',
+    steps: [
+      {
+        prompt: 'Step 1 — handle base cases',
+        blocks: [
+          { code: 'if (n <= 2) return n;', correct: true },
+          { code: 'if (n === 0) return 0;', correct: false },
+          { code: 'if (n === 1) return 1;\nif (n === 2) return 2;\nif (n === 3) return 3;', correct: false },
+          { code: 'if (n < 0) return 0;', correct: false },
+        ],
+        feedback: {
+          correct: 'n=1 → 1 way, n=2 → 2 ways. One line covers both.',
+          wrong: {
+            'if (n === 0) return 0;': 'n=0 is not valid input. Handle n=1 and n=2.',
+            'if (n === 1) return 1;\nif (n === 2) return 2;\nif (n === 3) return 3;': 'n=3 doesn\'t need a special case. Keep base cases minimal.',
+            'if (n < 0) return 0;': 'Negative n is not valid. Base cases are n=1 and n=2.',
+          }
+        },
+        snippet: '  if (n <= 2) return n;'
+      },
+      {
+        prompt: 'Step 2 — initialize DP variables',
+        blocks: [
+          { code: 'let prev2 = 1, prev1 = 2;', correct: true },
+          { code: 'let prev2 = 0, prev1 = 1;', correct: false },
+          { code: 'const dp = new Array(n + 1);\ndp[1] = 1; dp[2] = 2;', correct: false },
+          { code: 'let prev2 = 1, prev1 = 1;', correct: false },
+        ],
+        feedback: {
+          correct: 'prev2 = ways to reach step 1 = 1. prev1 = ways to reach step 2 = 2.',
+          wrong: {
+            'let prev2 = 0, prev1 = 1;': 'Fibonacci seeds but we need 1 and 2 for this problem.',
+            'const dp = new Array(n + 1);\ndp[1] = 1; dp[2] = 2;': 'Works but O(n) space. Two variables is O(1).',
+            'let prev2 = 1, prev1 = 1;': 'prev1 should be 2. Two ways to climb 2 stairs: (1+1) or (2).',
+          }
+        },
+        snippet: '  let prev2 = 1, prev1 = 2;'
+      },
+      {
+        prompt: 'Step 3 — loop and compute each step',
+        blocks: [
+          { code: 'for (let i = 3; i <= n; i++) {\n  [prev2, prev1] = [prev1, prev1 + prev2];\n}', correct: true },
+          { code: 'for (let i = 3; i <= n; i++) {\n  prev2 = prev1;\n  prev1 = prev1 + prev2;\n}', correct: false },
+          { code: 'for (let i = 2; i <= n; i++) {\n  [prev2, prev1] = [prev1, prev1 + prev2];\n}', correct: false },
+          { code: 'for (let i = 3; i < n; i++) {\n  [prev2, prev1] = [prev1, prev1 + prev2];\n}', correct: false },
+        ],
+        feedback: {
+          correct: 'JS destructuring handles simultaneous update cleanly — prev1 + prev2 uses old prev1 before it gets overwritten.',
+          wrong: {
+            'for (let i = 3; i <= n; i++) {\n  prev2 = prev1;\n  prev1 = prev1 + prev2;\n}': 'prev2 is updated before being used — by the time we compute prev1 + prev2, prev2 is already the new prev1.',
+            'for (let i = 2; i <= n; i++) {\n  [prev2, prev1] = [prev1, prev1 + prev2];\n}': 'Starting at i=2 re-processes step 2 — off by one.',
+            'for (let i = 3; i < n; i++) {\n  [prev2, prev1] = [prev1, prev1 + prev2];\n}': 'i < n stops one step early — returns answer for n-1 stairs.',
+          }
+        },
+        snippet: '  for (let i = 3; i <= n; i++) {\n    [prev2, prev1] = [prev1, prev1 + prev2];\n  }'
+      },
+      {
+        prompt: 'Step 4 — return the answer',
+        blocks: [
+          { code: 'return prev1;', correct: true },
+          { code: 'return prev2;', correct: false },
+          { code: 'return prev1 + prev2;', correct: false },
+          { code: 'return prev1 - prev2;', correct: false },
+        ],
+        feedback: {
+          correct: 'After the loop prev1 holds the number of ways to reach step n.',
+          wrong: {
+            'return prev2;': 'prev2 is the answer for n-1 stairs.',
+            'return prev1 + prev2;': 'That\'s the answer for n+1 stairs.',
+            'return prev1 - prev2;': 'Subtracting has no meaning here.',
+          }
+        },
+        snippet: '  return prev1;\n}'
+      }
+    ]
+  },
+  {
+    id: 'mergeintervals_js',
+    title: 'Merge Intervals',
+    subtitle: 'Given an array of intervals, merge all overlapping intervals.',
+    difficulty: 'medium',
+    language: 'javascript',
+    sig: 'function merge(intervals) {',
+    steps: [
+      {
+        prompt: 'Step 1 — sort intervals by start time',
+        blocks: [
+          { code: 'intervals.sort((a, b) => a[0] - b[0]);', correct: true },
+          { code: 'intervals.sort();', correct: false },
+          { code: '[...intervals].sort((a, b) => a[0] - b[0]);', correct: false },
+          { code: 'intervals.sort((a, b) => a[1] - b[1]);', correct: false },
+        ],
+        feedback: {
+          correct: 'Sorting by start time (a[0]) lets us process intervals left to right.',
+          wrong: {
+            'intervals.sort();': 'Default sort converts to strings — "10" < "9" alphabetically. Always use a comparator for numbers.',
+            '[...intervals].sort((a, b) => a[0] - b[0]);': 'Creates a new sorted array but doesn\'t update intervals — the variable is unchanged.',
+            'intervals.sort((a, b) => a[1] - b[1]);': 'Sorting by end time doesn\'t help — we need start times to detect overlaps.',
+          }
+        },
+        snippet: '  intervals.sort((a, b) => a[0] - b[0]);'
+      },
+      {
+        prompt: 'Step 2 — initialize result with first interval',
+        blocks: [
+          { code: 'const result = [intervals[0]];', correct: true },
+          { code: 'const result = [];', correct: false },
+          { code: 'const result = [...intervals];', correct: false },
+          { code: 'const result = intervals;', correct: false },
+        ],
+        feedback: {
+          correct: 'Seed result with the first interval then compare each subsequent one against result\'s last entry.',
+          wrong: {
+            'const result = [];': 'Empty result means nothing to compare against in the loop.',
+            'const result = [...intervals];': 'Copies all intervals unmerged — starting with wrong data.',
+            'const result = intervals;': 'Same reference — modifying result modifies intervals too.',
+          }
+        },
+        snippet: '  const result = [intervals[0]];'
+      },
+      {
+        prompt: 'Step 3 — loop and merge overlapping intervals',
+        blocks: [
+          { code: 'for (let i = 1; i < intervals.length; i++) {\n  const [start, end] = intervals[i];\n  if (start <= result.at(-1)[1])\n    result.at(-1)[1] = Math.max(result.at(-1)[1], end);\n  else\n    result.push([start, end]);\n}', correct: true },
+          { code: 'for (let i = 1; i < intervals.length; i++) {\n  const [start, end] = intervals[i];\n  if (start <= result.at(-1)[1])\n    result.at(-1)[1] = end;\n  else\n    result.push([start, end]);\n}', correct: false },
+          { code: 'for (let i = 0; i < intervals.length; i++) {\n  const [start, end] = intervals[i];\n  if (start <= result.at(-1)[1])\n    result.at(-1)[1] = Math.max(result.at(-1)[1], end);\n  else\n    result.push([start, end]);\n}', correct: false },
+          { code: 'for (let i = 1; i < intervals.length; i++) {\n  if (intervals[i][0] <= intervals[i-1][1])\n    intervals[i][1] = Math.max(intervals[i-1][1], intervals[i][1]);\n  else\n    result.push(intervals[i]);\n}', correct: false },
+        ],
+        feedback: {
+          correct: 'result.at(-1) gets the last element cleanly. Math.max handles fully contained intervals.',
+          wrong: {
+            'for (let i = 1; i < intervals.length; i++) {\n  const [start, end] = intervals[i];\n  if (start <= result.at(-1)[1])\n    result.at(-1)[1] = end;\n  else\n    result.push([start, end]);\n}': 'Missing Math.max — if current is fully inside last, this shrinks the end.',
+            'for (let i = 0; i < intervals.length; i++) {\n  const [start, end] = intervals[i];\n  if (start <= result.at(-1)[1])\n    result.at(-1)[1] = Math.max(result.at(-1)[1], end);\n  else\n    result.push([start, end]);\n}': 'Starting at i=0 compares first interval against itself — adds it twice.',
+            'for (let i = 1; i < intervals.length; i++) {\n  if (intervals[i][0] <= intervals[i-1][1])\n    intervals[i][1] = Math.max(intervals[i-1][1], intervals[i][1]);\n  else\n    result.push(intervals[i]);\n}': 'Compares against previous input not last merged result — misses multi-interval merges.',
+          }
+        },
+        snippet: '  for (let i = 1; i < intervals.length; i++) {\n    const [start, end] = intervals[i];\n    if (start <= result.at(-1)[1])\n      result.at(-1)[1] = Math.max(result.at(-1)[1], end);\n    else\n      result.push([start, end]);\n  }'
+      },
+      {
+        prompt: 'Step 4 — return the result',
+        blocks: [
+          { code: 'return result;', correct: true },
+          { code: 'return intervals;', correct: false },
+          { code: 'return result[0];', correct: false },
+          { code: 'return result.sort();', correct: false },
+        ],
+        feedback: {
+          correct: 'result holds all merged intervals.',
+          wrong: {
+            'return intervals;': 'intervals is the original input — not our merged result.',
+            'return result[0];': 'Returns only the first merged interval.',
+            'return result.sort();': 'result is already sorted — extra sort is redundant.',
+          }
+        },
+        snippet: '  return result;\n}'
+      }
+    ]
+  },
+  {
+    id: 'linkedlistcycle_js',
+    title: 'Linked List Cycle',
+    subtitle: 'Given the head of a linked list, return true if it has a cycle.',
+    difficulty: 'medium',
+    language: 'javascript',
+    sig: 'function hasCycle(head) {',
+    steps: [
+      {
+        prompt: 'Step 1 — set up slow and fast pointers',
+        blocks: [
+          { code: 'let slow = head, fast = head;', correct: true },
+          { code: 'let slow = head, fast = head.next;', correct: false },
+          { code: 'let slow = head, fast = null;', correct: false },
+          { code: 'let slow = head.next, fast = head;', correct: false },
+        ],
+        feedback: {
+          correct: 'Both start at head. slow moves 1 step, fast moves 2 — if there\'s a cycle they\'ll meet.',
+          wrong: {
+            'let slow = head, fast = head.next;': 'Works but needs a null check on head first. Starting both at head is simpler.',
+            'let slow = head, fast = null;': 'fast = null means fast.next immediately throws a TypeError.',
+            'let slow = head.next, fast = head;': 'Offset starting positions complicate the meeting condition.',
+          }
+        },
+        snippet: '  let slow = head, fast = head;'
+      },
+      {
+        prompt: 'Step 2 — loop while fast can move',
+        blocks: [
+          { code: 'while (fast && fast.next) {', correct: true },
+          { code: 'while (fast) {', correct: false },
+          { code: 'while (slow !== fast) {', correct: false },
+          { code: 'while (fast.next) {', correct: false },
+        ],
+        feedback: {
+          correct: 'Check both fast and fast.next — fast moves two steps so both must be non-null.',
+          wrong: {
+            'while (fast) {': 'Inside the loop we call fast.next.next — if fast.next is null this throws TypeError.',
+            'while (slow !== fast) {': 'At start slow === fast (both at head) — loop never runs, always returns false.',
+            'while (fast.next) {': 'Doesn\'t check fast itself — if fast is null, fast.next throws TypeError.',
+          }
+        },
+        snippet: '  while (fast && fast.next) {'
+      },
+      {
+        prompt: 'Step 3 — move pointers and check if they meet',
+        blocks: [
+          { code: 'slow = slow.next;\nfast = fast.next.next;\nif (slow === fast) return true;', correct: true },
+          { code: 'slow = slow.next;\nfast = fast.next;\nif (slow === fast) return true;', correct: false },
+          { code: 'fast = fast.next.next;\nslow = slow.next;\nif (slow.val === fast.val) return true;', correct: false },
+          { code: 'slow = slow.next.next;\nfast = fast.next;\nif (slow === fast) return true;', correct: false },
+        ],
+        feedback: {
+          correct: 'slow moves 1, fast moves 2. Same node reference means cycle found.',
+          wrong: {
+            'slow = slow.next;\nfast = fast.next;\nif (slow === fast) return true;': 'Same speed — they\'ll never catch each other. Fast must move 2 steps.',
+            'fast = fast.next.next;\nslow = slow.next;\nif (slow.val === fast.val) return true;': 'Comparing .val is wrong — two different nodes can have same value. Need reference equality (===).',
+            'slow = slow.next.next;\nfast = fast.next;\nif (slow === fast) return true;': 'Speeds swapped — unconventional and confusing.',
+          }
+        },
+        snippet: '    slow = slow.next;\n    fast = fast.next.next;\n    if (slow === fast) return true;\n  }'
+      },
+      {
+        prompt: 'Step 4 — return if no cycle found',
+        blocks: [
+          { code: 'return false;', correct: true },
+          { code: 'return true;', correct: false },
+          { code: 'return slow === null;', correct: false },
+          { code: 'return fast === null;', correct: false },
+        ],
+        feedback: {
+          correct: 'If fast reaches null the list terminates — no cycle.',
+          wrong: {
+            'return true;': 'If we exit the loop fast hit null — list terminates, no cycle.',
+            'return slow === null;': 'slow never reaches null before fast in a cycle-free list.',
+            'return fast === null;': 'Technically true but misleading — just return false.',
+          }
+        },
+        snippet: '  return false;\n}'
+      }
+    ]
   }
 ]

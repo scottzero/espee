@@ -94,7 +94,7 @@ export default function App() {
 
       {/* Language toggle */}
       <div style={{ display: 'flex', gap: '4px', marginBottom: '16px' }}>
-        {(['csharp', 'python'] as const).map(lang => (
+        {(['csharp', 'python', 'javascript'] as const).map(lang => (
           <button
             key={lang}
             onClick={() => {
@@ -115,7 +115,7 @@ export default function App() {
               fontWeight: language === lang ? 500 : 400,
             }}
           >
-            {lang === 'csharp' ? 'C#' : 'Python'}
+            {lang === 'csharp' ? 'C#' : lang === 'python' ? 'Python' : 'JS'}
           </button>
         ))}
       </div>
