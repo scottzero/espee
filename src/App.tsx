@@ -61,9 +61,6 @@ export default function App() {
           }}>
             espee
           </span>
-          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-            by Scott Payton
-          </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ textAlign: 'right' }}>
@@ -143,6 +140,21 @@ export default function App() {
           problem={currentProblem}
           onSolved={handleSolved}
         />
+      </div>
+      <div style={{
+        marginTop: '48px',
+        paddingTop: '16px',
+        borderTop: '0.5px solid var(--border)',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}>
+        <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+          © 2026 Scott Payton
+        </span>
+        <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+          espee — a muscle memory app
+        </span>
       </div>
 
     </div>
