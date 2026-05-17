@@ -1,7 +1,20 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { problems } from './data/problems'
 import { loadProgress, markSolved } from './store/progress'
+import { fetchGlobalXP, incrementGlobalXP } from './lib/supabase'
 import ProblemScreen from './components/ProblemScreen'
+
+function animateCounter(from: number, to: number, duration: number, setter: (n: number) => void) {
+  const start = performance.now()
+  function tick(now: number) {
+    const elapsed = now - start
+    const progress = Math.min(elapsed / duration, 1)
+    const eased = 1 - Math.pow(1 - progress, 3)
+    setter(Math.floor(from + (to - from) * eased))
+    if (progress < 1) requestAnimationFrame(tick)
+  }
+  requestAnimationFrame(tick)
+}
 
 export default function App() {
   const [progress, setProgress] = useState(() => loadProgress())
@@ -13,6 +26,15 @@ export default function App() {
     return Object.values(p).reduce((sum, v) => sum + v.timesSolved * 10, 0)
   })
   const [dark, setDark] = useState(false)
+  const [globalXP, setGlobalXP] = useState(0)
+  const [displayXP, setDisplayXP] = useState(0)
+
+  useEffect(() => {
+    fetchGlobalXP().then(xp => {
+      setGlobalXP(xp)
+      animateCounter(0, xp, 2000, setDisplayXP)
+    })
+  }, [])
 
   const filteredProblems = problems.filter(p => p.language === language)
   const currentProblem = filteredProblems[currentIdx] ?? filteredProblems[0]
@@ -33,6 +55,9 @@ export default function App() {
     const newProgress = markSolved(currentProblem.id)
     setProgress(newProgress)
     setXp(prev => prev + 10)
+    setGlobalXP(prev => prev + 10)
+    setDisplayXP(prev => prev + 10)
+    incrementGlobalXP(10)
     const nextIdx = (currentIdx + 1) % filteredProblems.length
     setCurrentIdx(nextIdx)
     setProblemKey(k => k + 1)
@@ -52,17 +77,28 @@ export default function App() {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: '16px',
+        marginBottom: '8px',
       }}>
-        <span style={{
-          fontSize: '14px',
-          fontWeight: 300,
-          letterSpacing: '0.15em',
-          color: 'var(--text-primary)',
-          fontFamily: 'Inter, system-ui, sans-serif',
-        }}>
-          espee
-        </span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <span style={{
+            fontSize: '14px',
+            fontWeight: 300,
+            letterSpacing: '0.15em',
+            color: 'var(--text-primary)',
+            fontFamily: 'Inter, system-ui, sans-serif',
+          }}>
+            espee
+          </span>
+          <span style={{
+            fontSize: '11px',
+            fontWeight: 300,
+            letterSpacing: '0.08em',
+            color: 'var(--text-muted)',
+            fontFamily: 'Inter, system-ui, sans-serif',
+          }}>
+            {displayXP.toLocaleString()} xp solved globally
+          </span>
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)' }}>{xp} XP</div>
@@ -173,8 +209,9 @@ export default function App() {
           onSolved={handleSolved}
         />
       </div>
-{/* Footer */}
-<div style={{
+
+      {/* Footer */}
+      <div style={{
         marginTop: '48px',
         paddingTop: '16px',
         borderTop: '0.5px solid var(--border)',
@@ -187,11 +224,12 @@ export default function App() {
         </span>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
           <a href="https://x.com/espeeapp" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>Twitter</a>
-          <a href="https://bsky.app/profile/espeeapp.bsky.social" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>Bsky</a>
-          <a href="https://www.linkedin.com/in/scottpayton1337/?skipRedirect=true" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>LinkedIn</a>
+          <a href="https://bsky.app/profile/espeeapp.bsky.social" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>Bluesky</a>
+          <a href="https://www.linkedin.com/in/scottpayton1337/" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>LinkedIn</a>
           <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>espee — a muscle memory app</span>
         </div>
       </div>
+
     </div>
   )
 }
