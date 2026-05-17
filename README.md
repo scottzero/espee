@@ -26,8 +26,12 @@ npm run dev
 
 ## Roadmap
 
-- [ ] Dark mode
-- [ ] More problems (medium + hard)
+- [ ] Dark mode ✅
+- [ ] More problems (medium + hard) ✅
+- [ ] Python language support (same problems, Python syntax)
 - [ ] Mobile app (Expo)
+- [ ] Progress screen (solve history, streaks, XP over time)
+- [ ] Visual diagrams after solving (how the algorithm works)
 - [ ] User accounts + sync across devices
+- [ ] Additional languages (Java, Go, Rust)
 - [ ] Leaderboard
