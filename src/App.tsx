@@ -48,16 +48,22 @@ export default function App() {
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        marginBottom: '20px',
+        alignItems: 'center',
+        marginBottom: '8px',
       }}>
-        <div>
-          <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 500, color: 'var(--text-primary)' }}>
-            {currentProblem.title}
-          </h1>
-          <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-secondary)', maxWidth: '480px' }}>
-            {currentProblem.subtitle}
-          </p>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+<span style={{
+            fontSize: '14px',
+            fontWeight: 300,
+            letterSpacing: '0.15em',
+            color: 'var(--text-primary)',
+            fontFamily: 'Inter, system-ui, sans-serif',
+          }}>
+            espee
+          </span>
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            by Scott Payton
+          </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ textAlign: 'right' }}>
@@ -86,6 +92,15 @@ export default function App() {
             {dark ? '☀️' : '🌙'}
           </button>
         </div>
+      </div>
+
+      <div style={{ marginBottom: '20px' }}>
+        <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 500, color: 'var(--text-primary)' }}>
+          {currentProblem.title}
+        </h1>
+        <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-secondary)', maxWidth: '480px' }}>
+          {currentProblem.subtitle}
+        </p>
       </div>
 
       <div style={{
