@@ -17,6 +17,20 @@ export default function Patterns() {
     }}>
 
       <div style={{ marginBottom: '24px' }}>
+      <div style={{ marginBottom: '16px' }}>
+        
+        <a href="/"
+        style={{
+          fontSize: '11px',
+          color: 'var(--text-muted)',
+          textDecoration: 'none',
+          letterSpacing: '0.04em',
+          fontFamily: 'Inter, system-ui, sans-serif',
+        }}
+      >
+        ← practice problems
+      </a>
+    </div>
         <h1 style={{ margin: '0 0 4px', fontSize: '22px', fontWeight: 500, color: 'var(--text-primary)' }}>
           Pattern Library
         </h1>
