@@ -80,15 +80,25 @@ export default function App() {
         marginBottom: '8px',
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <span style={{
-            fontSize: '14px',
-            fontWeight: 300,
-            letterSpacing: '0.15em',
-            color: 'var(--text-primary)',
-            fontFamily: 'Inter, system-ui, sans-serif',
-          }}>
-            espee
-          </span>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+            <span style={{
+              fontSize: '14px',
+              fontWeight: 300,
+              letterSpacing: '0.15em',
+              color: 'var(--text-primary)',
+              fontFamily: 'Inter, system-ui, sans-serif',
+            }}>
+              espee
+            </span>
+            <span style={{
+              fontSize: '11px',
+              fontWeight: 300,
+              color: 'var(--text-muted)',
+              fontFamily: 'Inter, system-ui, sans-serif',
+            }}>
+              — a muscle memory app
+            </span>
+          </div>
           <span style={{
             fontSize: '11px',
             fontWeight: 300,
@@ -127,6 +137,22 @@ export default function App() {
           </button>
         </div>
       </div>
+
+      {/* Patterns link */}
+      <div style={{ marginBottom: '16px' }}>
+              
+              <a href="/patterns"
+              style={{
+                fontSize: '11px',
+                color: 'var(--text-muted)',
+                textDecoration: 'none',
+                letterSpacing: '0.04em',
+                fontFamily: 'Inter, system-ui, sans-serif',
+              }}
+            >
+              study patterns →
+            </a>
+          </div>
 
       {/* Language toggle */}
       <div style={{ display: 'flex', gap: '4px', marginBottom: '16px' }}>
@@ -227,7 +253,6 @@ export default function App() {
           <a href="https://bsky.app/profile/espeeapp.bsky.social" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>Bluesky</a>
           <a href="https://ko-fi.com/espeeapp" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>Support ☕</a>
           <a href="https://www.linkedin.com/in/scottpayton1337/" target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: 'var(--text-muted)', textDecoration: 'none' }}>LinkedIn</a>
-          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>espee — a muscle memory app</span>
         </div>
       </div>
 
