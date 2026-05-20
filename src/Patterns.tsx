@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { patterns } from './data/patterns'
+import { useTheme } from './hooks/useTheme'
 
-type Lang = 'python' | 'javascript' | 'csharp'
+type Lang = 'csharp' | 'python' | 'javascript'
 
 export default function Patterns() {
   const [openId, setOpenId] = useState<string | null>('sliding-window')
   const [lang, setLang] = useState<Lang>('python')
+  const { dark, toggleDark } = useTheme()
 
   return (
     <div style={{
@@ -41,7 +43,7 @@ export default function Patterns() {
 
       {/* Language toggle */}
       <div style={{ display: 'flex', gap: '4px', marginBottom: '20px' }}>
-        {(['python', 'javascript', 'csharp'] as const).map(l => (
+      {(['csharp', 'python', 'javascript'] as const).map(l => (
           <button
             key={l}
             onClick={() => setLang(l)}

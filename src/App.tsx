@@ -3,6 +3,7 @@ import { problems } from './data/problems'
 import { loadProgress, markSolved } from './store/progress'
 import { fetchGlobalXP, incrementGlobalXP } from './lib/supabase'
 import ProblemScreen from './components/ProblemScreen'
+import { useTheme } from './hooks/useTheme'
 
 function animateCounter(from: number, to: number, duration: number, setter: (n: number) => void) {
   const start = performance.now()
@@ -25,7 +26,7 @@ export default function App() {
     const p = loadProgress()
     return Object.values(p).reduce((sum, v) => sum + v.timesSolved * 10, 0)
   })
-  const [dark, setDark] = useState(false)
+  const { dark, toggleDark } = useTheme()
   const [_globalXP, setGlobalXP] = useState(0)
   const [displayXP, setDisplayXP] = useState(0)
 
@@ -38,12 +39,6 @@ export default function App() {
 
   const filteredProblems = problems.filter(p => p.language === language)
   const currentProblem = filteredProblems[currentIdx] ?? filteredProblems[0]
-
-  function toggleDark() {
-    const next = !dark
-    setDark(next)
-    document.documentElement.setAttribute('data-theme', next ? 'dark' : 'light')
-  }
 
   function handleSelectProblem(idx: number) {
     if (idx === currentIdx) return
@@ -117,24 +112,22 @@ export default function App() {
             </div>
           </div>
           <button
-            onClick={toggleDark}
-            title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-            style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              border: '0.5px solid var(--border-secondary)',
-              background: 'var(--bg-secondary)',
-              cursor: 'pointer',
-              fontSize: '16px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            {dark ? '☀️' : '🌙'}
-          </button>
+          onClick={toggleDark}
+          style={{
+            width: '36px',
+            height: '36px',
+            borderRadius: '50%',
+            border: '0.5px solid var(--border-secondary)',
+            background: 'var(--bg-secondary)',
+            cursor: 'pointer',
+            fontSize: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {dark ? '☀️' : '🌙'}
+        </button>
         </div>
       </div>
 
