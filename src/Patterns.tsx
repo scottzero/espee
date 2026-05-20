@@ -6,7 +6,7 @@ type Lang = 'csharp' | 'python' | 'javascript'
 
 export default function Patterns() {
   const [openId, setOpenId] = useState<string | null>('sliding-window')
-  const [lang, setLang] = useState<Lang>('python')
+  const [lang, setLang] = useState<Lang>('csharp')
   const { dark, toggleDark } = useTheme()
 
   return (
@@ -18,21 +18,37 @@ export default function Patterns() {
       color: 'var(--text-primary)',
     }}>
 
-      <div style={{ marginBottom: '24px' }}>
-      <div style={{ marginBottom: '16px' }}>
-        
-        <a href="/"
-        style={{
+      {/* Top nav */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+        <a href="/" style={{
           fontSize: '11px',
           color: 'var(--text-muted)',
           textDecoration: 'none',
           letterSpacing: '0.04em',
           fontFamily: 'Inter, system-ui, sans-serif',
-        }}
-      >
-        ← practice problems
-      </a>
-    </div>
+        }}>
+          ← practice problems
+        </a>
+        <button
+          onClick={toggleDark}
+          style={{
+            width: '36px',
+            height: '36px',
+            borderRadius: '50%',
+            border: '0.5px solid var(--border-secondary)',
+            background: 'var(--bg-secondary)',
+            cursor: 'pointer',
+            fontSize: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {dark ? '☀️' : '🌙'}
+        </button>
+      </div>
+
+      <div style={{ marginBottom: '24px' }}>
         <h1 style={{ margin: '0 0 4px', fontSize: '22px', fontWeight: 500, color: 'var(--text-primary)' }}>
           Pattern Library
         </h1>
@@ -43,7 +59,7 @@ export default function Patterns() {
 
       {/* Language toggle */}
       <div style={{ display: 'flex', gap: '4px', marginBottom: '20px' }}>
-      {(['csharp', 'python', 'javascript'] as const).map(l => (
+        {(['csharp', 'python', 'javascript'] as const).map(l => (
           <button
             key={l}
             onClick={() => setLang(l)}
@@ -109,12 +125,10 @@ export default function Patterns() {
             {openId === p.id && (
               <div style={{ padding: '16px', borderTop: '0.5px solid var(--border)' }}>
 
-                {/* Core idea */}
                 <p style={{ fontSize: '13px', lineHeight: 1.7, color: 'var(--text-secondary)', margin: '0 0 16px' }}>
                   {p.coreIdea}
                 </p>
 
-                {/* Mental model */}
                 <div style={{ marginBottom: '16px' }}>
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '6px' }}>mental model</div>
                   <p style={{ fontSize: '13px', lineHeight: 1.7, color: 'var(--text-secondary)', margin: '0 0 8px' }}>
@@ -137,7 +151,6 @@ export default function Patterns() {
                   </pre>
                 </div>
 
-                {/* Flavors */}
                 <div style={{ marginBottom: '16px' }}>
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px' }}>flavors</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -159,7 +172,6 @@ export default function Patterns() {
                   </div>
                 </div>
 
-                {/* Template */}
                 <div style={{ marginBottom: '16px' }}>
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px' }}>template</div>
                   <pre style={{
@@ -179,7 +191,6 @@ export default function Patterns() {
                   </pre>
                 </div>
 
-                {/* When to use */}
                 <div>
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px' }}>when to use</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
