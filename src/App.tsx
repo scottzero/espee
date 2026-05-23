@@ -22,7 +22,7 @@ export default function App() {
   const [currentIdx, setCurrentIdx] = useState(0)
   const [problemKey, setProblemKey] = useState(0)
   const [language, setLanguage] = useState<'csharp' | 'python' | 'javascript'>('csharp')
-  const [xp, setXp] = useState(() => {
+  const [_xp, setXp] = useState(() => {
     const p = loadProgress()
     return Object.values(p).reduce((sum, v) => sum + v.timesSolved * 10, 0)
   })
