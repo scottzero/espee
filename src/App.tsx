@@ -67,15 +67,15 @@ export default function App() {
       color: 'var(--text-primary)',
     }}>
 
-      {/* Header */}
+{/* Header */}
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: '8px',
+        marginBottom: '16px',
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
             <span style={{
               fontSize: '14px',
               fontWeight: 300,
@@ -104,15 +104,9 @@ export default function App() {
             global xp: {displayXP.toLocaleString()}
           </span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '20px', fontWeight: 500, color: 'var(--text-primary)' }}>{xp} XP</div>
-            <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
-              {Object.keys(progress).length} solved
-            </div>
-          </div>
-          <button
+        <button
           onClick={toggleDark}
+          title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
           style={{
             width: '36px',
             height: '36px',
@@ -124,28 +118,44 @@ export default function App() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            flexShrink: 0,
           }}
         >
           {dark ? '☀️' : '🌙'}
         </button>
-        </div>
       </div>
 
-      {/* Patterns link */}
-      <div style={{ marginBottom: '16px' }}>
-              
-              <a href="/patterns"
-              style={{
-                fontSize: '11px',
-                color: 'var(--text-muted)',
-                textDecoration: 'none',
-                letterSpacing: '0.04em',
-                fontFamily: 'Inter, system-ui, sans-serif',
-              }}
-            >
-              study patterns →
-            </a>
-          </div>
+{/* Nav links */}
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', justifyContent: 'center' }}>
+        <a href="/patterns" style={{
+          fontSize: '11px',
+          color: 'var(--text-muted)',
+          textDecoration: 'none',
+          letterSpacing: '0.04em',
+          fontFamily: 'Inter, system-ui, sans-serif',
+          fontWeight: 500,
+          padding: '5px 14px',
+          borderRadius: '999px',
+          border: '0.5px solid var(--border-secondary)',
+          background: 'var(--bg-secondary)',
+        }}>
+          study patterns
+        </a>
+        <a href="/system-design" style={{
+          fontSize: '11px',
+          color: 'var(--text-muted)',
+          textDecoration: 'none',
+          letterSpacing: '0.04em',
+          fontFamily: 'Inter, system-ui, sans-serif',
+          fontWeight: 500,
+          padding: '5px 14px',
+          borderRadius: '999px',
+          border: '0.5px solid var(--border-secondary)',
+          background: 'var(--bg-secondary)',
+        }}>
+          study system design
+        </a>
+      </div>
 
       {/* Language toggle */}
       <div style={{ display: 'flex', gap: '4px', marginBottom: '16px' }}>

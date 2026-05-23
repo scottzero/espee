@@ -5,7 +5,7 @@ import { useTheme } from './hooks/useTheme'
 type Lang = 'csharp' | 'python' | 'javascript'
 
 export default function Patterns() {
-  const [openId, setOpenId] = useState<string | null>('sliding-window')
+const [openId, setOpenId] = useState<string | null>(null)
   const [lang, setLang] = useState<Lang>('csharp')
   const { dark, toggleDark } = useTheme()
 
